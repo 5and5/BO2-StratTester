@@ -79,25 +79,8 @@ where `script` is the name (without the extension) of the script. An easy trick 
 where `.../.../` denotes any directories you need to traverse in order to include the script. 
 
 ## Building 
-If you are using VSCode for editing there is a `tasks.json` within the `.vscode` folder you can use to build. When you open this json file,  you will see the following 
-```json
-"tasks": [
-
-        {
-            "label": "build all testing",
-            "type": "shell",
-            "command": "${cwd}/.vscode/t6-compiler.exe",
-            "args": [
-                "${workspaceFolder}\\src\\zm", "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops II Plutonuim\\storage\\t6\\scripts\\zm", "${workspaceFolder}\\src\\zm"
-            ],
-            ...
-        }
-]
-
-```
-You will want to modify the second value in the `args` folder to change the default install path of the compiled scripts.
-
-Then, to build, press `F1` and run "Build all testing"
+Using VSCode is the easiest way to build. ALl you have to do is press `F1`, select "Run Build Tasks", select "build all testing", and everything automatically builds and install in `%localappdata%\Plutonium\storage\t6\scripts`
+, press `F1` and run "Build all testing"
 
 # Credits
 5and5 - Coding
