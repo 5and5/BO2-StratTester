@@ -9,7 +9,7 @@
             "type": "shell",
             "command": "${cwd}/.vscode/t6-compiler.exe",
             "args": [
-                "${workspaceFolder}\\src\\zm", "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Call of Duty Black Ops II Plutonuim\\storage\\t6\\scripts\\zm", "${workspaceFolder}\\src\\zm"
+                "${workspaceFolder}\\src\\zm", "%localappdata%\\Plutonium\\storage\\t6\\scripts\\zm", "${workspaceFolder}\\src\\zm"
             ],
 
             "options": {"shell": {"executable": "cmd.exe","args": ["/C"]}},
