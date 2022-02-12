@@ -19,6 +19,7 @@
 
 main()
 {
+	// Pluto only
     // replaceFunc( maps/mp/zombies/_zm_powerups::powerup_drop, ::powerup_drop_override );
 }
 
@@ -32,21 +33,21 @@ onConnect()
 {
     for (;;)
     {
-        level waittill("connected", player);
+        level waittill( "connected" , player);
         player thread connected();
     }
 }
 
 connected()
 {
-    self endon("disconnect");
+    self endon( "disconnect" );
     self.init = 0;
 
     for(;;)
     {
-        self waittill("spawned_player");
+        self waittill( "spawned_player" );
 
-        if(!self.init)
+        if( !self.init )
         {
             self.init = 1;
 
@@ -55,11 +56,9 @@ connected()
             self thread give_weapons_on_spawn();
             self thread give_perks_on_spawn();
             self thread give_perks_on_revive();
-
-            // self thread self_after_round_logic_starts();
         }
 
-        if(!level.init)
+        if( !level.init )
         {
             level.init = 1;
 
@@ -274,7 +273,6 @@ give_weapons_on_spawn()
                 self giveweapon_nzv( "jetgun_zm" );
                 self giveweapon_nzv( "cymbal_monkey_zm" );
                 self giveweapon_nzv( "tazer_knuckles_zm" );
-                self giveweapon_nzv( "claymore_zm" );
                 self switchToWeapon( "raygun_mark2_upgraded_zm" );
             }
             break;
@@ -294,6 +292,7 @@ give_weapons_on_spawn()
             flag_wait( "afterlife_start_over" );
             self giveweapon_nzv( "blundersplat_upgraded_zm" );
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
+			self giveweapon_nzv( "claymore_zm" );
             self giveweapon_nzv( "upgraded_tomahawk_zm" );
             self.current_tactical_grenade = "upgraded_tomahawk_zm";
             self.current_tomahawk_weapon = "upgraded_tomahawk_zm";
@@ -305,12 +304,14 @@ give_weapons_on_spawn()
             self giveweapon_nzv( "m1911_upgraded_zm" );
             self giveweapon_nzv( "slowgun_upgraded_zm" );
             self giveweapon_nzv( "cymbal_monkey_zm" );
+			self giveweapon_nzv( "claymore_zm" );
             self switchToWeapon( "slowgun_upgraded_zm" );
             break;
         case "zm_tomb":
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
             self giveweapon_nzv( "staff_air_upgraded_zm" );
             self giveweapon_nzv( "cymbal_monkey_zm" );
+			self giveweapon_nzv( "claymore_zm" );
             self switchToWeapon( "staff_air_upgraded_zm" );
             break;
     }
