@@ -40,9 +40,38 @@ connected()
         if(!level.init)
         {
             level.init = 1;
+
+            enable_cheats();
+
+            level thread turnOnPower();
             level thread set_starting_round( 70 );
         }
     }
+}
+
+enable_cheats()
+{
+    setDvar( "sv_cheats", 1 );
+	setDvar( "cg_ufo_scaler", 0.7 );
+	level.player_out_of_playable_area_monitor = 0;
+}
+
+turnOnPower() //by xepixtvx
+{	
+	flag_wait( "initial_blackscreen_passed" );
+	wait 5;
+	trig = getEnt( "use_elec_switch", "targetname" );
+	powerSwitch = getEnt( "elec_switch", "targetname" );
+	powerSwitch notSolid();
+	trig setHintString( &"ZOMBIE_ELECTRIC_SWITCH" );
+	trig setVisibleToAll();
+	trig notify( "trigger", self );
+	trig setInvisibleToAll();
+	powerSwitch rotateRoll( -90, 0, 3 );
+	level thread maps/mp/zombies/_zm_perks::perk_unpause_all_perks();
+	powerSwitch waittill( "rotatedone" );
+	flag_set( "power_on" );
+	level setClientField( "zombie_power_on", 1 ); 
 }
 
 set_starting_round( round )
