@@ -87,6 +87,10 @@ connected()
             self thread give_weapons_on_spawn();
             self thread give_perks_on_spawn();
             self thread give_perks_on_revive();
+
+			self thread infinite_afterlifes();
+			self thread traptimer_hud();
+
         }
 
         if( !level.init )
@@ -98,12 +102,15 @@ connected()
             level thread turn_on_power();
             level thread set_starting_round();
 			level thread remove_boards_from_windows();
+
+			level thread mob_map_changes();
 			
 			flag_wait( "start_zombie_round_logic" );
    			wait 0.05;
 
 			level thread buildbuildables();
 			level thread buildcraftables();
+
         }
     }
 }
@@ -267,7 +274,7 @@ give_perks_by_map()
             wait 0.15;
             self give_perk("specialty_rof", 0);
             wait 0.15;
-            self give_perk("specialty_grenadepulldeath", 0);
+            // self give_perk("specialty_grenadepulldeath", 0);
             break;
         case "zm_buried":
             self give_perk("specialty_quickrevive", 0);
@@ -2940,5 +2947,119 @@ enemies_ignore_equipments()
 	{
 		maps/mp/zombies/_zm_equipment::enemies_ignore_equipment(equipment);
 		equipment = getNextArrayKey(level.zombie_include_equipment, equipment);
+	}
+}
+
+
+/*
+* *****************************************************
+*	
+* ********************** MOTD *************************
+*
+* *****************************************************
+*/
+
+mob_map_changes()
+{
+	if( level.script != "zm_prison" )
+		return;
+	
+	open_warden_fence();
+	turn_on_perks();
+}
+
+infinite_afterlifes()
+{
+	if( level.script != "zm_prison" )
+		return;
+
+	self endon( "disconnect" );
+
+	while( 1 )
+	{
+		self waittill( "player_revived", reviver );
+		wait 2;
+		self.lives++;
+	}
+}
+open_warden_fence()
+{
+	m_lock = getent( "masterkey_lock_2", "targetname" );
+	m_lock delete();
+	t_warden_fence_damage = getent( "warden_fence_damage", "targetname" );
+	t_warden_fence_damage delete();
+	admin_powerhouse_puzzle_door_clip = getent( "admin_powerhouse_puzzle_door_clip", "targetname" );
+	admin_powerhouse_puzzle_door_clip delete();
+	admin_powerhouse_puzzle_door = getent( "admin_powerhouse_puzzle_door", "targetname" );
+	admin_powerhouse_puzzle_door rotateyaw( 90, 0.5 );
+	exploder( 2000 );
+	flag_set( "generator_challenge_completed" );
+	wait 0.1;
+	level clientnotify( "sndWard" );
+	level thread maps/mp/zombies/_zm_audio::sndmusicstingerevent( "piece_mid" );
+	t_warden_fence_damage = getent( "warden_fence_damage", "targetname" );
+	t_warden_fence_damage delete();
+	level setclientfield( "warden_fence_down", 1 );
+	array_delete( getentarray( "generator_wires", "script_noteworthy" ) );
+	wait 3;
+	stop_exploder( 2000 );
+	wait 1;
+}
+
+turn_on_perks()
+{
+	// flag_wait( "initial_blackscreen_passed" );
+	// maps/mp/zombies/_zm_game_module::turn_power_on_and_open_doors();
+	// flag_wait( "start_zombie_round_logic" );
+	// level thread maps/mp/zm_alcatraz_traps::init_fan_trap_trigs();
+	// level thread maps/mp/zm_alcatraz_traps::init_acid_trap_trigs();
+	wait 1;
+	level notify( "sleight_on" );
+	wait_network_frame();
+	level notify( "doubletap_on" );
+	wait_network_frame();
+	level notify( "juggernog_on" );
+	wait_network_frame();
+	level notify( "electric_cherry_on" );
+	wait_network_frame();
+	level notify( "deadshot_on" );
+	wait_network_frame();
+	level notify( "divetonuke_on" );
+	wait_network_frame();
+	level notify( "additionalprimaryweapon_on" );
+	wait_network_frame();
+	level notify( "Pack_A_Punch_on" );
+	wait_network_frame();
+}
+
+traptimer_hud()
+{
+	self endon( "disconnect" );
+
+	traptimer_hud = newclienthudelem( self );
+	traptimer_hud.alignx = "right";
+	traptimer_hud.aligny = "top";
+	traptimer_hud.horzalign = "user_right";
+	traptimer_hud.vertalign = "user_top";
+	traptimer_hud.x = traptimer_hud.x - 5;
+	traptimer_hud.y = traptimer_hud.y + 20;
+	traptimer_hud.fontscale = 1.2;
+	traptimer_hud.alpha = 0;
+	traptimer_hud.color = ( 1, 1, 1 );
+	traptimer_hud.hidewheninmenu = 1;
+	traptimer_hud.hidden = 0;
+	traptimer_hud.label = &"";
+
+	flag_wait( "initial_blackscreen_passed" );
+	while( 1 )
+	{
+		level waittill( "trap_activated" );
+		if( !(level.trap_activated) )
+		{
+			traptimer_hud.alpha = 1;
+			traptimer_hud settimerup( 0 );
+			wait 25;
+			traptimer_hud settimerup( 0 );
+		}
 	}
 }
