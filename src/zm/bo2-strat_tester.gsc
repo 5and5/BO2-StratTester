@@ -763,7 +763,10 @@ set_hud_offset()
 }
 
 timer_hud_watcher()
-{	
+{
+	if( isDefined( level.VERSION ) )
+		return;
+
 	self endon("disconnect");
 	level endon( "end_game" );
 
@@ -891,6 +894,9 @@ display_sph( time, hordes )
 
 round_timer_hud_watcher()
 {	
+	if( isDefined( level.VERSION ) )
+		return;
+
 	self endon("disconnect");
 	level endon( "end_game" );
 
@@ -914,6 +920,9 @@ round_timer_hud_watcher()
 
 zombie_remaining_hud()
 {
+	if( isDefined( level.VERSION ) )
+		return;
+
 	self endon( "disconnect" );
 	level endon( "end_game" );
 
@@ -956,7 +965,7 @@ zombie_remaining_hud_watcher()
 
 zone_hud()
 {
-	if( !level.hud_zone_names )
+	if( !level.hud_zone_names || isDefined( level.VERSION ) )
 		return;
 
 	self endon("disconnect");

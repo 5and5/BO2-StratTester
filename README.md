@@ -34,6 +34,23 @@ classic Call of Duty titles on PC with features like dedicated servers, custom m
 - Open "BO2-Strat_Tester" and copy the "zm" folder into `%localappdata%\Plutonium\storage\t6\scripts`
 - Launch the game and enjoy!
 
+## Patch Notes
+
+### General
+
+- Start with weapons for high round setup
+- Start with perks
+- Perks are given after being revived
+- Power is turned on
+
+### HUD
+
+- Timer
+- Round timer
+- SPH - appears after round 50
+- Zombies remaining counter
+- Current zone
+
 ## Requirements
 - Plutonium Black Ops 2 installed on your PC
 # Installing 

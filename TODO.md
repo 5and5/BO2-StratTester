@@ -35,4 +35,3 @@
 
 - trap timer
 - health bar
-- zone
