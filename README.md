@@ -5,7 +5,7 @@ classic Call of Duty titles on PC with features like dedicated servers, custom m
 
 ## Download
 
-[Download](https://github.com/5and5/BO2-Remix/releases/download/latest/BO2-Strat_Tester.zip)
+[Download](https://github.com/5and5/BO2-Strat_Tester/releases/download/latest/BO2-Strat_Tester.zip)
 
 
 ## Created by: 5and5
@@ -23,7 +23,7 @@ classic Call of Duty titles on PC with features like dedicated servers, custom m
 ### Manual Installation
 
 - Download and install BO2 Plutonium [Plutonium Download](https://plutonium.pw/)
-- Download the latest version of [Strat Tester](https://github.com/5and5/BO2-Remix/releases/download/latest/BO2-Strat_Tester.zip)
+- Download the latest version of [Strat Tester](https://github.com/5and5/BO2-Strat_Tester/releases/download/latest/BO2-Strat_Tester.zip)
 - Open "BO2-Strat_Tester" and copy the "zm" folder into `%localappdata%\Plutonium\storage\t6\scripts`
 - Launch the game and enjoy!
 
