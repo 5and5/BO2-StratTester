@@ -20,7 +20,14 @@ classic Call of Duty titles on PC with features like dedicated servers, custom m
 
 ## How to Install
 
-### Manual Installation
+### Redacted Installation
+
+- Download and install BO2 Redacted [Redacted Download](https://redacted.se/)
+- Download the latest version of [Strat Tester](https://github.com/5and5/BO2-Strat_Tester/releases/download/latest/BO2-Strat_Tester.zip)
+- Open "BO2-Strat_Tester" and copy the "zm" folder into `Call of Duty Black Ops II Redacted\data\scripts`
+- Launch the game and enjoy!
+
+### Plutonium Installation
 
 - Download and install BO2 Plutonium [Plutonium Download](https://plutonium.pw/)
 - Download the latest version of [Strat Tester](https://github.com/5and5/BO2-Strat_Tester/releases/download/latest/BO2-Strat_Tester.zip)
