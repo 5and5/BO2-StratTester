@@ -25,7 +25,7 @@
 settings()
 {
 	// Settings
-	level.start_round = 100; 			// what round the game starts at
+	level.start_round = 70; 			// what round the game starts at
 	level.power_on = 1; 				// turns power on
 	level.perks_on_revive = 1; 			// give perks back on revive
 	level.perks_on_spawn = 1; 			// give perks on spawn
@@ -33,11 +33,12 @@ settings()
 	level.remove_boards = 1;			// remove all boards from windows
 
 	// HUD
-	level.hud_timer = 1; 				// total game timer
+	level.hud_timer = 0; 				// total game timer
 	level.hud_round_timer = 1; 			// round timer
 	level.hud_zombie_counter = 1;		// zombie remaining counter
 	level.hud_zone_names = 1;			// spawn zone hud
 	level.hud_health_bar = 0;			// not added yet
+	level.hud_trap_timer = 1;			// auto trap timer on mob
 }
 
 main()
@@ -48,7 +49,7 @@ main()
 
 init()
 {
-	level.STRAT_TESTER_VERSION = "0.5";
+	level.STRAT_TESTER_VERSION = "0.6";
     level.init = 0;
 	settings();
     level thread onConnect();
@@ -82,15 +83,16 @@ connected()
 			self welcome_message();
 
             self thread timer_hud();
+			self thread round_timer_hud();
 			self thread zone_hud();
+			self thread trap_timer_hud();
 			self thread zombie_remaining_hud();
+
             self thread give_weapons_on_spawn();
             self thread give_perks_on_spawn();
             self thread give_perks_on_revive();
 
 			self thread infinite_afterlifes();
-			self thread traptimer_hud();
-
         }
 
         if( !level.init )
@@ -773,7 +775,6 @@ timer_hud()
 
 	self set_hud_offset();
 	self thread timer_hud_watcher();
-	self thread round_timer_hud();
 
 	flag_wait( "initial_blackscreen_passed" );
 	self.timer_hud setTimerUp(0);
@@ -994,6 +995,41 @@ zombie_remaining_hud_watcher()
 			wait 0.1;
 		}
 		self.zombie_counter_hud.alpha = 0;
+	}
+}
+
+trap_timer_hud()
+{
+	if( level.script != "zm_prison" || !level.hud_trap_timer )
+		return;
+
+	self endon( "disconnect" );
+
+	self.traptimer_hud = newclienthudelem( self );
+	self.traptimer_hud.alignx = "left";
+	self.traptimer_hud.aligny = "top";
+	self.traptimer_hud.horzalign = "user_left";
+	self.traptimer_hud.vertalign = "user_top";
+	self.traptimer_hud.x += 4;
+	self.traptimer_hud.y += (2 + (15 * (level.hud_timer + level.hud_round_timer) ) + self.timer_hud_offset );
+	self.traptimer_hud.fontscale = 1.4;
+	self.traptimer_hud.alpha = 0;
+	self.traptimer_hud.color = ( 1, 1, 1 );
+	self.traptimer_hud.hidewheninmenu = 1;
+	self.traptimer_hud.hidden = 0;
+	self.traptimer_hud.label = &"";
+
+	while( 1 )
+	{
+		level waittill( "trap_activated" );
+		if( !level.trap_activated )
+		{
+			wait 0.5;
+			self.traptimer_hud.alpha = 1;
+			self.traptimer_hud settimer( 50 );
+			wait 50;
+			self.traptimer_hud.alpha = 0;
+		}
 	}
 }
 
@@ -3030,36 +3066,4 @@ turn_on_perks()
 	wait_network_frame();
 	level notify( "Pack_A_Punch_on" );
 	wait_network_frame();
-}
-
-traptimer_hud()
-{
-	self endon( "disconnect" );
-
-	traptimer_hud = newclienthudelem( self );
-	traptimer_hud.alignx = "right";
-	traptimer_hud.aligny = "top";
-	traptimer_hud.horzalign = "user_right";
-	traptimer_hud.vertalign = "user_top";
-	traptimer_hud.x = traptimer_hud.x - 5;
-	traptimer_hud.y = traptimer_hud.y + 20;
-	traptimer_hud.fontscale = 1.2;
-	traptimer_hud.alpha = 0;
-	traptimer_hud.color = ( 1, 1, 1 );
-	traptimer_hud.hidewheninmenu = 1;
-	traptimer_hud.hidden = 0;
-	traptimer_hud.label = &"";
-
-	flag_wait( "initial_blackscreen_passed" );
-	while( 1 )
-	{
-		level waittill( "trap_activated" );
-		if( !(level.trap_activated) )
-		{
-			traptimer_hud.alpha = 1;
-			traptimer_hud settimerup( 0 );
-			wait 25;
-			traptimer_hud settimerup( 0 );
-		}
-	}
 }
