@@ -50,9 +50,11 @@ connected()
         {
             self.init = 1;
 
+            self.score = 500000;
             self thread timer_hud();
             self thread give_weapons_on_spawn();
             self thread give_perks_on_spawn();
+            self thread give_perks_on_revive();
 
             // self thread self_after_round_logic_starts();
         }
@@ -64,24 +66,9 @@ connected()
             enable_cheats();
 
             level thread turn_on_power();
-            
-            level thread after_round_logic_starts();
+            level thread set_starting_round( 100 );
         }
     }
-}
-
-self_after_round_logic_starts()
-{
-    flag_wait( "start_zombie_round_logic" );
-   	wait 0.05;
-}
-
-after_round_logic_starts()
-{
-	flag_wait( "start_zombie_round_logic" );
-   	wait 0.05;
-
-    level thread set_starting_round( 100 );
 }
 
 enable_cheats()
@@ -133,23 +120,28 @@ set_starting_round( round )
 * *****************************************************
 */
 
+give_perks_on_revive()
+{
+	level endon("end_game");
+	self endon( "disconnect" );
+
+	while( 1 )
+	{
+		self waittill( "player_revived", reviver );
+
+        self give_perks_by_map();
+	}
+}
+
 give_perks_on_spawn()
 {
-    // case "specialty_additionalprimaryweapon":
-    // case "specialty_armorvest":
-    // case "specialty_deadshot":
-    // case "specialty_fastmeleerecovery":
-    // case "specialty_fastreload":
-    // case "specialty_finalstand":
-    // case "specialty_flakjacket":
-    // case "specialty_grenadepulldeath":
-    // case "specialty_longersprint":
-    // case "specialty_nomotionsensor":
-    // case "specialty_rof":
-    // case "specialty_scavenger":
-    // case "specialty_showonradar":
     level waittill("initial_blackscreen_passed");
-    wait 0.05;
+    wait 0.5;
+    self give_perks_by_map();
+}
+
+give_perks_by_map()
+{
     switch( level.script )
     {
         case "zm_transit":
