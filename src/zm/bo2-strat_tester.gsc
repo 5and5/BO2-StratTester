@@ -16,6 +16,18 @@
 #include maps/mp/zombies/_zm_melee_weapon;
 #include maps/mp/zombies/_zm_audio;
 
+settings()
+{
+	// Settings
+	level.start_round = 100; // what round the game starts at
+	level.power_on = 1; // turns power on
+	level.perks_on_revive = 1 // give perks back on revive
+	level.perks_on_spawn = 1 // give perks on spawn
+
+	// HUD
+	level.hud_timer = 1; // total game timer
+	level.hud_round_timer = 1; // round timer
+}
 
 main()
 {
@@ -25,7 +37,9 @@ main()
 
 init()
 {
+	level.STRAT_TESTER_VERSION = "0.2";
     level.init = 0;
+	settings();
     level thread onConnect();
 }
 
@@ -52,6 +66,7 @@ connected()
             self.init = 1;
 
             self.score = 500000;
+			self welcome_message();
             self thread timer_hud();
             self thread give_weapons_on_spawn();
             self thread give_perks_on_spawn();
@@ -65,9 +80,15 @@ connected()
             enable_cheats();
 
             level thread turn_on_power();
-            level thread set_starting_round( 100 );
+            level thread set_starting_round();
         }
     }
+}
+
+welcome_message()
+{
+	self iprintln( "Welcome to Strat Tester v" + level.STRAT_TESTER_VERSION );
+	self iprintln( "Made by 5and5" );
 }
 
 enable_cheats()
@@ -84,6 +105,9 @@ enable_cheats()
 
 turn_on_power() //by xepixtvx
 {	
+	if( !level.power_on )
+		return;
+
 	flag_wait( "initial_blackscreen_passed" );
 	wait 5;
 	trig = getEnt( "use_elec_switch", "targetname" );
@@ -100,14 +124,12 @@ turn_on_power() //by xepixtvx
 	level setClientField( "zombie_power_on", 1 ); 
 }
 
-set_starting_round( round )
+set_starting_round()
 {
-    level.round = round;
-
 	level.first_round = false;
     level.zombie_move_speed = 130;
 	level.zombie_vars[ "zombie_spawn_delay" ] = 0.08;
-	level.round_number = level.round;
+	level.round_number = level.start_round;
 }
 
 
@@ -121,6 +143,9 @@ set_starting_round( round )
 
 give_perks_on_revive()
 {
+	if( !level.perks_on_revive )
+		return;
+
 	level endon("end_game");
 	self endon( "disconnect" );
 
@@ -134,6 +159,9 @@ give_perks_on_revive()
 
 give_perks_on_spawn()
 {
+	if( !level.perks_on_spawn )
+		return;
+
     level waittill("initial_blackscreen_passed");
     wait 0.5;
     self give_perks_by_map();
@@ -240,6 +268,7 @@ give_perks_by_map()
 give_weapons_on_spawn()
 {
     level waittill("initial_blackscreen_passed");
+
     switch( level.script )
     {
         case "zm_transit":
@@ -650,16 +679,14 @@ giveweapon_nzv( weapon )
 			}
 		}
 	}
-	self stealth_iprintln( "Weapon: " + ( weapon + " ^2Gived" ) );
+	self stealth_iprintln( "Weapon: " + ( weapon + " ^2Given" ) );
 
 }
 
 stealth_iprintln( message )
 {
-    self iprintln( message );
+    // self iprintln( message );
 }
-
-
 
 give_melee_weapon_instant( weapon_name )
 {
@@ -689,10 +716,6 @@ timer_hud()
 {	
 	self endon("disconnect");
 
-    // if( getDvar( "hud_timer" ) != "")
-
-    level.hud_timer = 1;
-
 	self.timer_hud = newClientHudElem(self);
 	self.timer_hud.alignx = "left";
 	self.timer_hud.aligny = "top";
@@ -711,9 +734,6 @@ timer_hud()
 
 	flag_wait( "initial_blackscreen_passed" );
 	self.timer_hud setTimerUp(0);
-
-	// self thread tab_hud();
-	// self thread waittill_player_pressed_scoreboard();
 
 	level waittill( "end_game" );
 
@@ -758,8 +778,6 @@ timer_hud_watcher()
 round_timer_hud()
 {
 	self endon("disconnect");
-
-    level.hud_round_timer = 1;
 
 	self.round_timer_hud = newClientHudElem(self);
 	self.round_timer_hud.alignx = "left";
