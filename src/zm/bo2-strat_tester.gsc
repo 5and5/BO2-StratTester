@@ -19,14 +19,16 @@
 settings()
 {
 	// Settings
-	level.start_round = 100; // what round the game starts at
-	level.power_on = 1; // turns power on
-	level.perks_on_revive = 1 // give perks back on revive
-	level.perks_on_spawn = 1 // give perks on spawn
+	level.start_round = 100; 			// what round the game starts at
+	level.power_on = 1; 				// turns power on
+	level.perks_on_revive = 1; 			// give perks back on revive
+	level.perks_on_spawn = 1; 			// give perks on spawn
+	level.weapons_on_spawn = 1;			// give weapons on spawn
 
 	// HUD
-	level.hud_timer = 1; // total game timer
-	level.hud_round_timer = 1; // round timer
+	level.hud_timer = 1; 				// total game timer
+	level.hud_round_timer = 1; 			// round timer
+	level.hud_zombie_counter = 1;		// zombie remaining counter
 }
 
 main()
@@ -37,7 +39,7 @@ main()
 
 init()
 {
-	level.STRAT_TESTER_VERSION = "0.2";
+	level.STRAT_TESTER_VERSION = "0.3 beta";
     level.init = 0;
 	settings();
     level thread onConnect();
@@ -68,6 +70,7 @@ connected()
             self.score = 500000;
 			self welcome_message();
             self thread timer_hud();
+			self thread zombie_remaining_hud();
             self thread give_weapons_on_spawn();
             self thread give_perks_on_spawn();
             self thread give_perks_on_revive();
@@ -187,9 +190,9 @@ give_perks_by_map()
             {
                 self give_perk("specialty_armorvest", 0);
                 wait 0.15;
-                self give_perk("specialty_longersprint", 0);
-                wait 0.15;
                 self give_perk("specialty_rof", 0);
+                wait 0.15;
+                self give_perk("specialty_longersprint", 0);
                 wait 0.15;
                 self give_perk("specialty_quickrevive", 0);
             }
@@ -267,6 +270,9 @@ give_perks_by_map()
 
 give_weapons_on_spawn()
 {
+	if( !level.weapons_on_spawn )
+		return;
+	
     level waittill("initial_blackscreen_passed");
 
     switch( level.script )
@@ -900,5 +906,47 @@ round_timer_hud_watcher()
 		}
 		self.round_timer_hud.alpha = 0;
 
+	}
+}
+
+zombie_remaining_hud()
+{
+	self endon( "disconnect" );
+	level endon( "end_game" );
+
+	level waittill( "start_of_round" );
+
+    self.zombie_counter_hud = maps/mp/gametypes_zm/_hud_util::createFontString( "hudsmall" , 1.4 );
+    self.zombie_counter_hud maps/mp/gametypes_zm/_hud_util::setPoint( "CENTER", "CENTER", "CENTER", 190 );
+    self.zombie_counter_hud.alpha = 0;
+    self.zombie_counter_hud.label = &"Zombies: ^1";
+	self thread zombie_remaining_hud_watcher();
+
+    while( 1 )
+    {
+        self.zombie_counter_hud setValue( ( maps/mp/zombies/_zm_utility::get_round_enemy_array().size + level.zombie_total ) );
+        
+        wait 0.05; 
+    }
+}
+
+zombie_remaining_hud_watcher()
+{	
+	self endon("disconnect");
+	level endon( "end_game" );
+
+	while(1)
+	{
+		while( !level.hud_zombie_counter )
+		{
+			wait 0.1;
+		}
+		self.zombie_counter_hud.alpha = 1;
+
+		while( level.hud_zombie_counter )
+		{
+			wait 0.1;
+		}
+		self.zombie_counter_hud.alpha = 0;
 	}
 }
