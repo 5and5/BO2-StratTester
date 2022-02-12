@@ -27,7 +27,6 @@
 - start round
 - round delay
 
-- remove boards
 - open doors
 - disable powerups
 

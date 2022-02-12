@@ -1,12 +1,10 @@
 # Black Ops 2 Strat Tester
 
-This mod for Black Ops 2 Plutonium will allow people to test strategies more efficiently in game. Plutonium is a project dedicated to reviving 
-classic Call of Duty titles on PC with features like dedicated servers, custom modding support, offline mode, and more.
+This mod for Black Ops 2 Zombies that will allow people to test strategies more efficiently in game.
 
 ## Download
 
 [Download](https://github.com/5and5/BO2-Strat_Tester/releases/download/latest/BO2-Strat_Tester.zip)
-
 
 ## Created by: 5and5
 
@@ -38,10 +36,11 @@ classic Call of Duty titles on PC with features like dedicated servers, custom m
 
 ### General
 
-- Start with weapons for high round setup
-- Start with perks
+- Weapons for high round setup are given
+- Perks are given on spawn
 - Perks are given after being revived
 - Power is turned on
+- Boards are removed from windows
 
 ### HUD
 
@@ -49,7 +48,7 @@ classic Call of Duty titles on PC with features like dedicated servers, custom m
 - Round timer
 - SPH - appears after round 50
 - Zombies remaining counter
-- Current zone
+- Current player zone
 
 ## Requirements
 - Plutonium Black Ops 2 installed on your PC

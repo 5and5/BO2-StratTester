@@ -15,6 +15,8 @@
 #include maps/mp/zombies/_zm_perks;
 #include maps/mp/zombies/_zm_melee_weapon;
 #include maps/mp/zombies/_zm_audio;
+#include maps/mp/zombies/_zm_blockers;
+
 
 settings()
 {
@@ -24,6 +26,7 @@ settings()
 	level.perks_on_revive = 1; 			// give perks back on revive
 	level.perks_on_spawn = 1; 			// give perks on spawn
 	level.weapons_on_spawn = 1;			// give weapons on spawn
+	level.remove_boards = 1;			// remove all boards from windows
 
 	// HUD
 	level.hud_timer = 1; 				// total game timer
@@ -41,7 +44,7 @@ main()
 
 init()
 {
-	level.STRAT_TESTER_VERSION = "0.3 beta";
+	level.STRAT_TESTER_VERSION = "0.4";
     level.init = 0;
 	settings();
     level thread onConnect();
@@ -87,6 +90,8 @@ connected()
 
             level thread turn_on_power();
             level thread set_starting_round();
+
+			level thread remove_boards_from_windows();
         }
     }
 }
@@ -136,6 +141,16 @@ set_starting_round()
     level.zombie_move_speed = 130;
 	level.zombie_vars[ "zombie_spawn_delay" ] = 0.08;
 	level.round_number = level.start_round;
+}
+
+remove_boards_from_windows()
+{	
+	if( !level.remove_boards )
+		return;
+
+	flag_wait( "initial_blackscreen_passed" );
+
+	maps/mp/zombies/_zm_blockers::open_all_zbarriers();
 }
 
 
