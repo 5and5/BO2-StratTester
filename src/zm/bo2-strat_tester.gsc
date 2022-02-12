@@ -50,7 +50,10 @@ connected()
         {
             self.init = 1;
 
-            self thread self_after_round_logic_starts();
+            self thread give_weapons_on_spawn();
+            self thread give_perks_on_spawn();
+
+            // self thread self_after_round_logic_starts();
         }
 
         if(!level.init)
@@ -70,8 +73,6 @@ self_after_round_logic_starts()
 {
     flag_wait( "start_zombie_round_logic" );
    	wait 0.05;
-
-    self give_weapons_on_spawn();
 }
 
 after_round_logic_starts()
@@ -122,9 +123,121 @@ set_starting_round( round )
 	level.round_number = getDvarInt( "start_round" );
 }
 
+give_perks_on_spawn()
+{
+    // case "specialty_additionalprimaryweapon":
+    // case "specialty_armorvest":
+    // case "specialty_deadshot":
+    // case "specialty_fastmeleerecovery":
+    // case "specialty_fastreload":
+    // case "specialty_finalstand":
+    // case "specialty_flakjacket":
+    // case "specialty_grenadepulldeath":
+    // case "specialty_longersprint":
+    // case "specialty_nomotionsensor":
+    // case "specialty_rof":
+    // case "specialty_scavenger":
+    // case "specialty_showonradar":
+    level waittill("initial_blackscreen_passed");
+    wait 0.05;
+    switch( level.script )
+    {
+        case "zm_transit":
+        	location = level.scr_zm_map_start_location;
+            if ( location == "farm" )
+            {
+                self give_perk("specialty_armorvest", 0);
+                wait 0.15;
+                self give_perk("specialty_fastreload", 0);
+                wait 0.15;
+                self give_perk("specialty_rof", 0);
+                wait 0.15;
+                self give_perk("specialty_quickrevive", 0);
+            }
+            else if ( location == "town" )
+            {
+                self give_perk("specialty_armorvest", 0);
+                wait 0.15;
+                self give_perk("specialty_longersprint", 0);
+                wait 0.15;
+                self give_perk("specialty_rof", 0);
+                wait 0.15;
+                self give_perk("specialty_quickrevive", 0);
+            }
+            else if ( location == "transit" && !is_classic() ) //depot
+            {
+  
+            }
+            else if ( location == "transit" )
+            {
+                self give_perk("specialty_armorvest", 0);
+                wait 0.15;
+                self give_perk("specialty_longersprint", 0);
+                wait 0.15;
+                self give_perk("specialty_fastreload", 0);
+                wait 0.15;
+                self give_perk("specialty_quickrevive", 0);
+            }
+            break;
+        case "zm_nuked":
+            self give_perk("specialty_armorvest", 0);
+            wait 0.15;
+            self give_perk("specialty_fastreload", 0);
+            wait 0.15;
+            self give_perk("specialty_rof", 0);
+            wait 0.15;
+            self give_perk("specialty_quickrevive", 0);
+            break;
+        case "zm_highrise":
+            self give_perk("specialty_armorvest", 0);
+            wait 0.15;
+            self give_perk("specialty_fastreload", 0);
+            wait 0.15;
+            self give_perk("specialty_rof", 0);
+            wait 0.15;
+            self give_perk("specialty_quickrevive", 0);
+            break;
+        case "zm_prison":
+            self give_perk("specialty_armorvest", 0);
+            wait 0.15;
+            self give_perk("specialty_fastreload", 0);
+            wait 0.15;
+            self give_perk("specialty_rof", 0);
+            wait 0.15;
+            self give_perk("specialty_grenadepulldeath", 0);
+            break;
+        case "zm_buried":
+            self give_perk("specialty_quickrevive", 0);
+            wait 0.15;
+            self give_perk("specialty_armorvest", 0);
+            wait 0.15;
+            self give_perk("specialty_additionalprimaryweapon", 0);
+            wait 0.15;
+            self give_perk("specialty_fastreload", 0);
+            wait 0.15;
+            self give_perk("specialty_longersprint", 0);
+            wait 0.15;
+            self give_perk("specialty_rof", 0);
+            break;
+        case "zm_tomb":
+            self give_perk("specialty_armorvest", 0);
+            wait 0.15;
+            self give_perk("specialty_additionalprimaryweapon", 0);
+            wait 0.15;
+            self give_perk("specialty_fastreload", 0);
+            wait 0.15;
+            self give_perk("specialty_longersprint", 0);
+            wait 0.15;
+            self give_perk("specialty_flakjacket", 0);
+            wait 0.15;
+            self give_perk("specialty_quickrevive", 0);
+            break;
+    }
+}
+
 give_weapons_on_spawn()
 {
-    wait 2;
+    level waittill("initial_blackscreen_passed");
     switch( level.script )
     {
         case "zm_transit":
@@ -179,9 +292,12 @@ give_weapons_on_spawn()
             self giveweapon_nzv( "blundersplat_upgraded_zm" );
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
             self giveweapon_nzv( "upgraded_tomahawk_zm" );
+            self setclientfieldtoplayer( "upgraded_tomahawk_in_use", 1 );
             break;
         case "zm_buried":
+            wait 0.5;
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
+            self giveweapon_nzv( "m1911_upgraded_zm" );
             self giveweapon_nzv( "slowgun_upgraded_zm" );
             self giveweapon_nzv( "cymbal_monkey_zm" );
             self switchToWeapon( "slowgun_upgraded_zm" );
