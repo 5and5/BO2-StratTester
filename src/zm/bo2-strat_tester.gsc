@@ -81,7 +81,7 @@ after_round_logic_starts()
 	flag_wait( "start_zombie_round_logic" );
    	wait 0.05;
 
-    level thread set_starting_round( 70 );
+    level thread set_starting_round( 100 );
 }
 
 enable_cheats()
@@ -116,12 +116,12 @@ turn_on_power() //by xepixtvx
 
 set_starting_round( round )
 {
-	if( getDvar( "start_round" ) == "")
-		setDvar( "start_round", round );
+    level.round = round;
 
 	level.first_round = false;
+    level.zombie_move_speed = 130;
 	level.zombie_vars[ "zombie_spawn_delay" ] = 0.08;
-	level.round_number = getDvarInt( "start_round" );
+	level.round_number = level.round;
 }
 
 

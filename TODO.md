@@ -33,7 +33,6 @@
 
 ### Hud
 
-- sph
 - trap timer
 - health bar
 - remaining counter
