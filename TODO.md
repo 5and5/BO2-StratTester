@@ -35,4 +35,4 @@
 
 - trap timer
 - health bar
-- remaining counter
+- zone
