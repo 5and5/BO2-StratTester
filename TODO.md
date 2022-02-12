@@ -24,9 +24,7 @@
 
 ### Settings
 
-- start round
 - round delay
-
 - open doors
 - disable powerups
 

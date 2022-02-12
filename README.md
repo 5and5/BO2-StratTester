@@ -40,6 +40,7 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 - Perks are given on spawn
 - Perks are given after being revived
 - Power is turned on
+- Buildable parts are given on spawn
 - Boards are removed from windows
 
 ### HUD
@@ -49,15 +50,6 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 - SPH - appears after round 50
 - Zombies remaining counter
 - Current player zone
-
-## Requirements
-- Plutonium Black Ops 2 installed on your PC
-# Installing 
-To install, head the the [releases](https://github.com/5and5/BO2-Strat_Tester/releases/tag/latest) section and download the latest zip file.
-
-Next, you want to head to `C:\Users\{your_user}\AppData\Local\Plutonium\storage\t6\scripts` and paste the `zm` folder within.
-
-Now, all you have to do is load up your map of choice and its off to the races!
 
 # Bugs, Feature Reqeusts, etc.
 If you encounter any bugs, have a feature request, something isn't clear, etc. you may [open a new issue](https://github.com/5and5/BO2-Strat_Tester/issues/new)
