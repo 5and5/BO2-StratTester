@@ -3,6 +3,30 @@
 This mod for Black Ops 2 Plutonium will allow people to test strategies more efficiently in game. Plutonium is a project dedicated to reviving 
 classic Call of Duty titles on PC with features like dedicated servers, custom modding support, offline mode, and more.
 
+## Download
+
+[Download](https://github.com/5and5/BO2-Remix/releases/download/latest/BO2-Strat_Tester.zip)
+
+
+## Created by: 5and5
+
+[Discord](https://discord.gg/Z44Vnjd)
+
+[YouTube](https://www.youtube.com/user/Zomb0s4life)
+
+[Twitch](https://twitch.tv/5and5)
+
+[Twitter](https://twitter.com/5and55)
+
+## How to Install
+
+### Manual Installation
+
+- Download and install BO2 Plutonium [Plutonium Download](https://plutonium.pw/)
+- Download the latest version of [Strat Tester](https://github.com/5and5/BO2-Remix/releases/download/latest/BO2-Strat_Tester.zip)
+- Open "BO2-Strat_Tester" and copy the "zm" folder into `%localappdata%\Plutonium\storage\t6\scripts`
+- Launch the game and enjoy!
+
 ## Requirements
 - Plutonium Black Ops 2 installed on your PC
 # Installing 
