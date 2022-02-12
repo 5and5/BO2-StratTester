@@ -20,8 +20,6 @@
 
 ### general
 
-- give weapons on spawn
-- give perks on spawn
 - add mod menu
 
 ### Settings
@@ -32,11 +30,9 @@
 - remove boards
 - open doors
 - disable powerups
-- power on
 
 ### Hud
 
-- round timer
 - sph
 - trap timer
 - health bar

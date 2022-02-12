@@ -50,6 +50,7 @@ connected()
         {
             self.init = 1;
 
+            self thread timer_hud();
             self thread give_weapons_on_spawn();
             self thread give_perks_on_spawn();
 
@@ -122,6 +123,15 @@ set_starting_round( round )
 	level.zombie_vars[ "zombie_spawn_delay" ] = 0.08;
 	level.round_number = getDvarInt( "start_round" );
 }
+
+
+/*
+* *****************************************************
+*	
+* ****************** Weapons/Perks ********************
+*
+* *****************************************************
+*/
 
 give_perks_on_spawn()
 {
@@ -198,6 +208,7 @@ give_perks_on_spawn()
             self give_perk("specialty_quickrevive", 0);
             break;
         case "zm_prison":
+            flag_wait( "afterlife_start_over" );
             self give_perk("specialty_armorvest", 0);
             wait 0.15;
             self give_perk("specialty_fastreload", 0);
@@ -292,6 +303,8 @@ give_weapons_on_spawn()
             self giveweapon_nzv( "blundersplat_upgraded_zm" );
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
             self giveweapon_nzv( "upgraded_tomahawk_zm" );
+            self.current_tactical_grenade = "upgraded_tomahawk_zm";
+            self.current_tomahawk_weapon = "upgraded_tomahawk_zm";
             self setclientfieldtoplayer( "upgraded_tomahawk_in_use", 1 );
             break;
         case "zm_buried":
@@ -670,3 +683,211 @@ give_melee_weapon_instant( weapon_name )
 	}
 }
 
+
+/*
+* *****************************************************
+*	
+* *********************** HUD *************************
+*
+* *****************************************************
+*/
+
+timer_hud()
+{	
+	self endon("disconnect");
+
+    // if( getDvar( "hud_timer" ) != "")
+
+    level.hud_timer = 1;
+
+	self.timer_hud = newClientHudElem(self);
+	self.timer_hud.alignx = "left";
+	self.timer_hud.aligny = "top";
+	self.timer_hud.horzalign = "user_left";
+	self.timer_hud.vertalign = "user_top";
+	self.timer_hud.x += 4;
+	self.timer_hud.y += 2;
+	self.timer_hud.fontscale = 1.4;
+	self.timer_hud.alpha = 0;
+	self.timer_hud.color = ( 1, 1, 1 );
+	self.timer_hud.hidewheninmenu = 1;
+
+	self set_hud_offset();
+	self thread timer_hud_watcher();
+	self thread round_timer_hud();
+
+	flag_wait( "initial_blackscreen_passed" );
+	self.timer_hud setTimerUp(0);
+
+	// self thread tab_hud();
+	// self thread waittill_player_pressed_scoreboard();
+
+	level waittill( "end_game" );
+
+	level.total_time -= .1; // need to set it below the number or it shows the next number
+	while( 1 )
+	{	
+		self.timer_hud setTimer(level.total_time);
+		self.timer_hud.alpha = 1;
+		self.round_timer_hud.alpha = 0;
+		wait 0.1;
+	}
+}
+
+set_hud_offset()
+{
+	self.timer_hud_offset = 0;
+	self.zone_hud_offset = 15;
+}
+
+timer_hud_watcher()
+{	
+	self endon("disconnect");
+	level endon( "end_game" );
+
+	while(1)
+	{	
+		while( !level.hud_timer )
+		{
+			wait 0.1;
+		}
+		self.timer_hud.y = (2 + self.timer_hud_offset);
+		self.timer_hud.alpha = 1;
+
+		while( level.hud_timer )
+		{
+			wait 0.1;
+		}
+		self.timer_hud.alpha = 0;
+	}
+}
+
+round_timer_hud()
+{
+	self endon("disconnect");
+
+    level.hud_round_timer = 1;
+
+	self.round_timer_hud = newClientHudElem(self);
+	self.round_timer_hud.alignx = "left";
+	self.round_timer_hud.aligny = "top";
+	self.round_timer_hud.horzalign = "user_left";
+	self.round_timer_hud.vertalign = "user_top";
+	self.round_timer_hud.x += 4;
+	self.round_timer_hud.y += (2 + (15 * level.hud_timer ) + self.timer_hud_offset );
+	self.round_timer_hud.fontscale = 1.4;
+	self.round_timer_hud.alpha = 0;
+	self.round_timer_hud.color = ( 1, 1, 1 );
+	self.round_timer_hud.hidewheninmenu = 1;
+
+	flag_wait( "initial_blackscreen_passed" );
+
+	self thread round_timer_hud_watcher();
+
+	level.FADE_TIME = 0.2;
+
+	while( 1 )
+	{
+		zombies_this_round = level.zombie_total + get_round_enemy_array().size;
+		hordes = zombies_this_round / 24;
+		dog_round = flag( "dog_round" );
+		leaper_round = flag( "leaper_round" );
+
+		self.round_timer_hud setTimerUp(0);
+		start_time = int(getTime() / 1000);
+
+		level waittill( "end_of_round" );
+
+		end_time = int(getTime() / 1000);
+		time = end_time - start_time;
+
+		self display_round_time(time, hordes, dog_round, leaper_round);
+
+		level waittill( "start_of_round" );
+
+		if( level.hud_round_timer )
+		{
+			self.round_timer_hud FadeOverTime(level.FADE_TIME);
+			self.round_timer_hud.alpha = 1;
+		}
+	}
+}
+
+display_round_time(time, hordes, dog_round, leaper_round)
+{
+	timer_for_hud = time - 0.05;
+
+	sph_off = 1;
+	if(level.round_number > 50 && !dog_round && !leaper_round)
+	{
+		sph_off = 0;
+	}
+
+	self.round_timer_hud FadeOverTime(level.FADE_TIME);
+	self.round_timer_hud.alpha = 0;
+	wait level.FADE_TIME * 2;
+
+	self.round_timer_hud.label = &"Round Time: ";
+	self.round_timer_hud FadeOverTime(level.FADE_TIME);
+	self.round_timer_hud.alpha = 1;
+
+	for ( i = 0; i < 20 + (20 * sph_off); i++ ) // wait 10s or 5s
+	{
+		self.round_timer_hud setTimer(timer_for_hud);
+		wait 0.25;
+	}
+
+	self.round_timer_hud FadeOverTime(level.FADE_TIME);
+	self.round_timer_hud.alpha = 0;
+	wait level.FADE_TIME * 2;
+
+	if(sph_off == 0)
+	{
+		self display_sph(time, hordes);
+	}
+
+	self.round_timer_hud.label = &"";
+}
+
+display_sph( time, hordes )
+{
+	sph = time / hordes;
+
+	self.round_timer_hud FadeOverTime(level.FADE_TIME);
+	self.round_timer_hud.alpha = 1;
+	self.round_timer_hud.label = &"SPH: ";
+	self.round_timer_hud setValue(sph);
+
+	for ( i = 0; i < 5; i++ )
+	{
+		wait 1;
+	}
+
+	self.round_timer_hud FadeOverTime(level.FADE_TIME);
+	self.round_timer_hud.alpha = 0;
+
+	wait level.FADE_TIME;
+}
+
+round_timer_hud_watcher()
+{	
+	self endon("disconnect");
+	level endon( "end_game" );
+
+	while( 1 )
+	{
+		while( !level.hud_round_timer )
+		{
+			wait 0.1;
+		}
+		self.round_timer_hud.y = (2 + (15 * level.hud_timer ) + self.timer_hud_offset );
+		self.round_timer_hud.alpha = 1;
+
+		while( level.hud_round_timer )
+		{
+			wait 0.1;
+		}
+		self.round_timer_hud.alpha = 0;
+
+	}
+}
