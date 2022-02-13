@@ -31,6 +31,7 @@ settings()
 	level.perks_on_spawn = 1; 			// give perks on spawn
 	level.weapons_on_spawn = 1;			// give weapons on spawn
 	level.remove_boards = 1;			// remove all boards from windows
+	level.open_doors = 0;				// opens all power doors
 
 	// HUD
 	level.hud_timer = 0; 				// total game timer
@@ -104,6 +105,7 @@ connected()
             level thread turn_on_power();
             level thread set_starting_round();
 			level thread remove_boards_from_windows();
+			level thread turn_power_on_and_open_doors_custom();
 
 			level thread mob_map_changes();
 			
@@ -172,6 +174,30 @@ remove_boards_from_windows()
 	flag_wait( "initial_blackscreen_passed" );
 
 	maps/mp/zombies/_zm_blockers::open_all_zbarriers();
+}
+
+turn_power_on_and_open_doors_custom() //checked changed at own discretion
+{
+	if( !level.open_doors )
+		return;
+
+	flag_wait( "initial_blackscreen_passed" );
+	level.local_doors_stay_open = 1;
+	level.power_local_doors_globally = 1;
+	flag_set( "power_on" );
+	level setclientfield( "zombie_power_on", 1 );
+	zombie_doors = getentarray( "zombie_door", "targetname" );
+	foreach ( door in zombie_doors )
+	{
+		if ( isDefined( door.script_noteworthy ) && door.script_noteworthy == "electric_door" )
+		{
+			door notify( "power_on" );
+		}
+		else if ( isDefined( door.script_noteworthy ) && door.script_noteworthy == "local_electric_door" )
+		{
+			door notify( "local_power_on" );
+		}
+	}
 }
 
 
@@ -387,6 +413,7 @@ give_weapons_on_spawn()
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
             self giveweapon_nzv( "staff_air_upgraded_zm" );
             self giveweapon_nzv( "cymbal_monkey_zm" );
+            self giveweapon_nzv( "mp40_upgraded_zm" );
 			self giveweapon_nzv( "claymore_zm" );
             self switchToWeapon( "staff_air_upgraded_zm" );
             break;
