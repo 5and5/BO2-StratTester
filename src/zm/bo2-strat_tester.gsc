@@ -303,6 +303,8 @@ give_perks_by_map()
             self give_perk("specialty_flakjacket", 0);
             wait 0.15;
             self give_perk("specialty_quickrevive", 0);
+			wait 0.15;
+            self give_perk("specialty_rof", 0);
             break;
     }
 }

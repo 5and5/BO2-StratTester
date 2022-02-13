@@ -47,7 +47,8 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 
 - Timer
 - Round timer
-- SPH - appears after round 50
+- Trap timer
+- SPH - appears at the end of rounds
 - Zombies remaining counter
 - Current player zone
 
