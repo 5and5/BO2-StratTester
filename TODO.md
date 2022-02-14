@@ -26,7 +26,7 @@
 
 - remove perk limit
 - set round number
-- round delay
+- round start delay
 - open doors
 - disable powerups
 

@@ -8,13 +8,7 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 
 ## Created by: 5and5
 
-[Discord](https://discord.gg/Z44Vnjd)
-
-[YouTube](https://www.youtube.com/user/Zomb0s4life)
-
-[Twitch](https://twitch.tv/5and5)
-
-[Twitter](https://twitter.com/5and55)
+[Discord](https://discord.gg/Z44Vnjd) [YouTube](https://www.youtube.com/user/Zomb0s4life) [Twitch](https://twitch.tv/5and5) [Twitter](https://twitter.com/5and55)
 
 ## How to Install
 
