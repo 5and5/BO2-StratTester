@@ -24,11 +24,11 @@
 
 ### Settings
 
+- remove perk limit
+- set round number
 - round delay
 - open doors
 - disable powerups
 
 ### Hud
-
-- trap timer
 - health bar

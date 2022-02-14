@@ -32,6 +32,28 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 - Open "BO2-Strat_Tester" and copy the "zm" folder into `%localappdata%\Plutonium\storage\t6\scripts`
 - Launch the game and enjoy!
 
+### How To Use Cheats
+
+- Cheats can be used by typing their key word(s) into the console
+- To open the console press the tilda key (key under ESC)
+- Cheats can also be bound to a key using the key word "bind" (this will active the cheat when you press the bounded key)
+
+#### List of Useful Cheats
+
+- `god` godmode
+- `noclip` flying
+- `give ammo` refills ammo
+- `give m1911_upgraded_zm` gives weapon (this gives upgraded m1911)
+- `timescale 10` changes the speed of the game (10 is max)
+- `ai_disableSpawn 1` stops zombies from spawning
+
+#### List of Useful Binds
+
+- `bind F1 noclip` binds noclip to F1
+- `bind F2 "give ammo"` binds max ammo to F2
+- `bind F3 noclip` binds flying to F3
+- `bind F4 "toggle timescale 5 1"` binds 5x timescale to F4
+
 ## Patch Notes
 
 ### General
@@ -52,10 +74,12 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 - Zombies remaining counter
 - Current player zone
 
-# Bugs, Feature Reqeusts, etc.
+# Coding Related Stuff
+
+## Bugs, Feature Reqeusts, etc.
 If you encounter any bugs, have a feature request, something isn't clear, etc. you may [open a new issue](https://github.com/5and5/BO2-Strat_Tester/issues/new)
 
-# Contributing
+## Contributing
 
 To contribute, all you have to do is clone the repo. To clone it, open a terminal with git installed and type 
 ```

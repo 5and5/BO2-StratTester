@@ -243,23 +243,13 @@ give_perks_by_map()
         	location = level.scr_zm_map_start_location;
             if ( location == "farm" )
             {
-                self give_perk("specialty_armorvest", 0);
-                wait 0.15;
-                self give_perk("specialty_fastreload", 0);
-                wait 0.15;
-                self give_perk("specialty_rof", 0);
-                wait 0.15;
-                self give_perk("specialty_quickrevive", 0);
+				perks = array( "specialty_armorvest", "specialty_fastreload", "specialty_rof", "specialty_quickrevive" );
+				self give_perks( perks );
             }
             else if ( location == "town" )
             {
-                self give_perk("specialty_armorvest", 0);
-                wait 0.15;
-                self give_perk("specialty_rof", 0);
-                wait 0.15;
-                self give_perk("specialty_longersprint", 0);
-                wait 0.15;
-                self give_perk("specialty_quickrevive", 0);
+				perks = array( "specialty_armorvest", "specialty_longersprint", "specialty_rof", "specialty_quickrevive" );
+				self give_perks( perks );
             }
             else if ( location == "transit" && !is_classic() ) //depot
             {
@@ -267,72 +257,41 @@ give_perks_by_map()
             }
             else if ( location == "transit" )
             {
-                self give_perk("specialty_armorvest", 0);
-                wait 0.15;
-                self give_perk("specialty_longersprint", 0);
-                wait 0.15;
-                self give_perk("specialty_fastreload", 0);
-                wait 0.15;
-                self give_perk("specialty_quickrevive", 0);
+				perks = array( "specialty_armorvest", "specialty_longersprint", "specialty_fastreload", "specialty_quickrevive" );
+				self give_perks( perks );
             }
             break;
         case "zm_nuked":
-            self give_perk("specialty_armorvest", 0);
-            wait 0.15;
-            self give_perk("specialty_fastreload", 0);
-            wait 0.15;
-            self give_perk("specialty_rof", 0);
-            wait 0.15;
-            self give_perk("specialty_quickrevive", 0);
+			perks = array( "specialty_armorvest", "specialty_fastreload", "specialty_rof", "specialty_quickrevive" );
+			self give_perks( perks );
             break;
         case "zm_highrise":
-            self give_perk("specialty_armorvest", 0);
-            wait 0.15;
-            self give_perk("specialty_fastreload", 0);
-            wait 0.15;
-            self give_perk("specialty_rof", 0);
-            wait 0.15;
-            self give_perk("specialty_quickrevive", 0);
+			perks = array( "specialty_armorvest", "specialty_fastreload", "specialty_rof", "specialty_quickrevive" );
+			self give_perks( perks );
             break;
         case "zm_prison":
             flag_wait( "afterlife_start_over" );
-            self give_perk("specialty_armorvest", 0);
-            wait 0.15;
-            self give_perk("specialty_fastreload", 0);
-            wait 0.15;
-            self give_perk("specialty_rof", 0);
-            wait 0.15;
-            // self give_perk("specialty_grenadepulldeath", 0);
+			perks = array( "specialty_armorvest", "specialty_fastreload", "specialty_rof", "specialty_grenadepulldeath" );
+			self give_perks( perks );
             break;
         case "zm_buried":
-            self give_perk("specialty_quickrevive", 0);
-            wait 0.15;
-            self give_perk("specialty_armorvest", 0);
-            wait 0.15;
-            self give_perk("specialty_additionalprimaryweapon", 0);
-            wait 0.15;
-            self give_perk("specialty_fastreload", 0);
-            wait 0.15;
-            self give_perk("specialty_longersprint", 0);
-            wait 0.15;
-            self give_perk("specialty_rof", 0);
+			perks = array( "specialty_armorvest", "specialty_fastreload", "specialty_additionalprimaryweapon", "specialty_rof", "specialty_longersprint", "specialty_quickrevive" );
+			self give_perks( perks );
             break;
         case "zm_tomb":
-            self give_perk("specialty_armorvest", 0);
-            wait 0.15;
-            self give_perk("specialty_additionalprimaryweapon", 0);
-            wait 0.15;
-            self give_perk("specialty_fastreload", 0);
-            wait 0.15;
-            self give_perk("specialty_longersprint", 0);
-            wait 0.15;
-            self give_perk("specialty_flakjacket", 0);
-            wait 0.15;
-            self give_perk("specialty_quickrevive", 0);
-			wait 0.15;
-            self give_perk("specialty_rof", 0);
+			perks = array( "specialty_armorvest", "specialty_fastreload", "specialty_additionalprimaryweapon", "specialty_flakjacket", "specialty_rof", "specialty_longersprint", "specialty_quickrevive" );
+			self give_perks( perks );
             break;
     }
+}
+
+give_perks( perk_array )
+{
+	foreach( perk in perk_array )
+	{
+		self give_perk( perk, 0 );
+		wait 0.15;
+	}
 }
 
 give_weapons_on_spawn()
@@ -392,16 +351,15 @@ give_weapons_on_spawn()
             break;
         case "zm_prison":
             flag_wait( "afterlife_start_over" );
+			if( isDefined( level.VERSION ) )
+				self giveweapon_nzv( "blundergat_upgraded_zm" );
             self giveweapon_nzv( "blundersplat_upgraded_zm" );
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
 			self giveweapon_nzv( "claymore_zm" );
             self giveweapon_nzv( "upgraded_tomahawk_zm" );
-            self.current_tactical_grenade = "upgraded_tomahawk_zm";
-            self.current_tomahawk_weapon = "upgraded_tomahawk_zm";
             self setclientfieldtoplayer( "upgraded_tomahawk_in_use", 1 );
             break;
         case "zm_buried":
-            wait 0.5;
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
             self giveweapon_nzv( "m1911_upgraded_zm" );
             self giveweapon_nzv( "slowgun_upgraded_zm" );
@@ -410,14 +368,25 @@ give_weapons_on_spawn()
             self switchToWeapon( "slowgun_upgraded_zm" );
             break;
         case "zm_tomb":
+			if( cointoss() )
+            	self giveweapon_nzv( "staff_air_upgraded_zm" );
+			else
+				self giveweapon_nzv( "staff_ice_upgraded_zm" );
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
-            self giveweapon_nzv( "staff_air_upgraded_zm" );
             self giveweapon_nzv( "cymbal_monkey_zm" );
             self giveweapon_nzv( "mp40_upgraded_zm" );
 			self giveweapon_nzv( "claymore_zm" );
             self switchToWeapon( "staff_air_upgraded_zm" );
             break;
     }
+}
+
+give_weapons( weapon_array )
+{
+	foreach( weapon in weapon_array )
+	{
+		self giveweapon_nzv( weapon );
+	}
 }
 
 giveweapon_nzv( weapon )
