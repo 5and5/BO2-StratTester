@@ -49,7 +49,7 @@ main()
 
 init()
 {
-	level.STRAT_TESTER_VERSION = "0.6";
+	level.STRAT_TESTER_VERSION = "0.7";
     level.init = 0;
 	settings();
     level thread onConnect();
@@ -159,6 +159,10 @@ turn_on_power() //by xepixtvx
 
 set_starting_round()
 {
+	create_dvar( "start_round", 70 );
+	if( isDvarAllowed( "start_round" ) )
+		level.start_round = getDvarInt( "start_round" );
+
 	level.first_round = false;
     level.zombie_move_speed = 130;
 	level.zombie_vars[ "zombie_spawn_delay" ] = 0.08;
@@ -197,6 +201,20 @@ turn_power_on_and_open_doors_custom() //checked changed at own discretion
 			door notify( "local_power_on" );
 		}
 	}
+}
+
+create_dvar( dvar, set )
+{
+    if( getDvar( dvar ) == "" )
+		setDvar( dvar, set );
+}
+
+isDvarAllowed( dvar )
+{
+	if( getDvar( dvar ) == "" )
+		return false;
+	else
+		return true;
 }
 
 
@@ -749,7 +767,7 @@ give_melee_weapon_instant( weapon_name )
 /*
 * *****************************************************
 *	
-* *********************** HUD *************************
+* ******************* Persistent **********************
 *
 * *****************************************************
 */
