@@ -388,7 +388,7 @@ give_weapons_on_spawn()
 			if( cointoss() )
             	self giveweapon_nzv( "staff_air_upgraded_zm" );
 			else
-				self giveweapon_nzv( "staff_ice_upgraded_zm" );
+				self giveweapon_nzv( "staff_water_upgraded_zm" );
             self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
             self giveweapon_nzv( "cymbal_monkey_zm" );
             self giveweapon_nzv( "mp40_upgraded_zm" );
