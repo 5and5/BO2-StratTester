@@ -53,6 +53,7 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 
 ### General
 
+- Start round is set to 70 this can be changed with `start_round X` (only works on pluto)
 - Weapons for high round setup are given
 - Perks are given on spawn
 - Perks are given after being revived

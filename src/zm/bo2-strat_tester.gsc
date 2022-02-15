@@ -925,6 +925,9 @@ timer_hud_watcher()
 
 round_timer_hud()
 {
+	if( isDefined( level.VERSION ) )
+		return;
+
 	self endon("disconnect");
 
 	self.round_timer_hud = newClientHudElem(self);
@@ -969,6 +972,29 @@ round_timer_hud()
 			self.round_timer_hud FadeOverTime(level.FADE_TIME);
 			self.round_timer_hud.alpha = 1;
 		}
+	}
+}
+
+round_timer_hud_watcher()
+{	
+	self endon("disconnect");
+	level endon( "end_game" );
+
+	while( 1 )
+	{
+		while( !level.hud_round_timer )
+		{
+			wait 0.1;
+		}
+		self.round_timer_hud.y = (2 + (15 * level.hud_timer ) + self.timer_hud_offset );
+		self.round_timer_hud.alpha = 1;
+
+		while( level.hud_round_timer )
+		{
+			wait 0.1;
+		}
+		self.round_timer_hud.alpha = 0;
+
 	}
 }
 
@@ -1028,32 +1054,6 @@ display_sph( time, hordes )
 	wait level.FADE_TIME;
 }
 
-round_timer_hud_watcher()
-{	
-	if( isDefined( level.VERSION ) )
-		return;
-
-	self endon("disconnect");
-	level endon( "end_game" );
-
-	while( 1 )
-	{
-		while( !level.hud_round_timer )
-		{
-			wait 0.1;
-		}
-		self.round_timer_hud.y = (2 + (15 * level.hud_timer ) + self.timer_hud_offset );
-		self.round_timer_hud.alpha = 1;
-
-		while( level.hud_round_timer )
-		{
-			wait 0.1;
-		}
-		self.round_timer_hud.alpha = 0;
-
-	}
-}
-
 zombie_remaining_hud()
 {
 	if( isDefined( level.VERSION ) )
@@ -1101,24 +1101,24 @@ zombie_remaining_hud_watcher()
 
 trap_timer_hud()
 {
-	if( level.script != "zm_prison" || !level.hud_trap_timer )
+	if( level.script != "zm_prison" || !level.hud_trap_timer || isDefined( level.VERSION ) )
 		return;
 
 	self endon( "disconnect" );
 
-	self.traptimer_hud = newclienthudelem( self );
-	self.traptimer_hud.alignx = "left";
-	self.traptimer_hud.aligny = "top";
-	self.traptimer_hud.horzalign = "user_left";
-	self.traptimer_hud.vertalign = "user_top";
-	self.traptimer_hud.x += 4;
-	self.traptimer_hud.y += (2 + (15 * (level.hud_timer + level.hud_round_timer) ) + self.timer_hud_offset );
-	self.traptimer_hud.fontscale = 1.4;
-	self.traptimer_hud.alpha = 0;
-	self.traptimer_hud.color = ( 1, 1, 1 );
-	self.traptimer_hud.hidewheninmenu = 1;
-	self.traptimer_hud.hidden = 0;
-	self.traptimer_hud.label = &"";
+	self.trap_timer_hud = newclienthudelem( self );
+	self.trap_timer_hud.alignx = "left";
+	self.trap_timer_hud.aligny = "top";
+	self.trap_timer_hud.horzalign = "user_left";
+	self.trap_timer_hud.vertalign = "user_top";
+	self.trap_timer_hud.x += 4;
+	self.trap_timer_hud.y += (2 + (15 * (level.hud_timer + level.hud_round_timer) ) + self.timer_hud_offset );
+	self.trap_timer_hud.fontscale = 1.4;
+	self.trap_timer_hud.alpha = 0;
+	self.trap_timer_hud.color = ( 1, 1, 1 );
+	self.trap_timer_hud.hidewheninmenu = 1;
+	self.trap_timer_hud.hidden = 0;
+	self.trap_timer_hud.label = &"";
 
 	while( 1 )
 	{
@@ -1126,10 +1126,10 @@ trap_timer_hud()
 		if( !level.trap_activated )
 		{
 			wait 0.5;
-			self.traptimer_hud.alpha = 1;
-			self.traptimer_hud settimer( 50 );
+			self.trap_timer_hud.alpha = 1;
+			self.trap_timer_hud settimer( 50 );
 			wait 50;
-			self.traptimer_hud.alpha = 0;
+			self.trap_timer_hud.alpha = 0;
 		}
 	}
 }
