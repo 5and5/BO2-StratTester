@@ -131,7 +131,7 @@ welcome_message()
 
 enable_strat_tester()
 {
-	create_dvar( "strat_tester", 0 );
+	create_dvar( "strat_tester", 1 );
 	if( isDvarAllowed( "strat_tester" ) )
 		level.strat_tester = getDvarInt( "strat_tester" );
 }
