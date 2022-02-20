@@ -31,6 +31,7 @@ settings()
 	level.weapons_on_spawn = 1;			// give weapons on spawn
 	level.remove_boards = 1;			// remove all boards from windows
 	level.open_doors = 0;				// opens all power doors
+	level.strat_tester = 1;				// enable strat tester
 
 	// HUD
 	level.hud_timer = 0; 				// total game timer
@@ -49,7 +50,7 @@ main()
 
 init()
 {
-	level.STRAT_TESTER_VERSION = "0.7";
+	level.STRAT_TESTER_VERSION = "0.8";
     level.init = 0;
 	settings();
     level thread onConnect();
@@ -68,6 +69,10 @@ connected()
 {
     self endon( "disconnect" );
     self.init = 0;
+
+	enable_strat_tester();
+	if( !level.strat_tester )
+		return;
 
     for(;;)
     {
@@ -122,6 +127,13 @@ welcome_message()
 {
 	self iprintln( "Welcome to Strat Tester v" + level.STRAT_TESTER_VERSION );
 	self iprintln( "Made by 5and5" );
+}
+
+enable_strat_tester()
+{
+	create_dvar( "strat_tester", 0 );
+	if( isDvarAllowed( "strat_tester" ) )
+		level.strat_tester = getDvarInt( "strat_tester" );
 }
 
 enable_cheats()
@@ -265,7 +277,10 @@ give_perks_by_map()
             }
             else if ( location == "town" )
             {
-				perks = array( "specialty_armorvest", "specialty_longersprint", "specialty_rof", "specialty_quickrevive" );
+				if( isDefined( level.VERSION ) )
+					perks = array( "specialty_armorvest", "specialty_fastreload", "specialty_rof", "specialty_quickrevive" );
+				else	
+					perks = array( "specialty_armorvest", "specialty_longersprint", "specialty_rof", "specialty_quickrevive" );
 				self give_perks( perks );
             }
             else if ( location == "transit" && !is_classic() ) //depot
@@ -332,6 +347,7 @@ give_weapons_on_spawn()
             else if ( location == "town" )
             {
                 self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
+				self giveWeapon_nzv( "ray_gun_upgraded_zm");
                 self giveweapon_nzv( "m1911_upgraded_zm" );
                 self giveweapon_nzv( "cymbal_monkey_zm" );
                 self switchToWeapon( "raygun_mark2_upgraded_zm" );
@@ -394,6 +410,7 @@ give_weapons_on_spawn()
             self giveweapon_nzv( "mp40_upgraded_zm" );
 			self giveweapon_nzv( "claymore_zm" );
             self switchToWeapon( "staff_air_upgraded_zm" );
+			self switchToWeapon( "staff_water_upgraded_zm" );
             break;
     }
 }
