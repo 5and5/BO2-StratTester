@@ -24,15 +24,19 @@
 settings()
 {
 	// Settings
+	level.strat_tester = 1;				// enable strat tester
 	level.start_round = 70; 			// what round the game starts at
-	level.start_delay = 25;				// time till zombies start spawning
-	level.power_on = 1; 				// turns power on
+	level.start_delay = 15;				// time till zombies start spawning
+
+	// Weapons and Perks
 	level.perks_on_revive = 1; 			// give perks back on revive
 	level.perks_on_spawn = 1; 			// give perks on spawn
 	level.weapons_on_spawn = 1;			// give weapons on spawn
+
+	// Options
+	level.power_on = 1; 				// turns power on
 	level.remove_boards = 1;			// remove all boards from windows
 	level.open_doors = 0;				// opens all power doors
-	level.strat_tester = 1;				// enable strat tester
 
 	// HUD
 	level.hud_timer = 0; 				// total game timer
@@ -43,15 +47,9 @@ settings()
 	level.hud_health_bar = 0;			// not added yet
 }
 
-main()
-{
-	// Pluto only
-    // replaceFunc( maps/mp/zombies/_zm_powerups::powerup_drop, ::powerup_drop_override );
-}
-
 init()
 {
-	level.STRAT_TESTER_VERSION = "0.9";
+	level.STRAT_TESTER_VERSION = "1.0";
     level.init = 0;
 	settings();
     level thread onConnect();
@@ -235,6 +233,10 @@ round_pause( delay )
 
 remove_boards_from_windows()
 {	
+	create_dvar( "st_remove_boards", 1 );
+	if( !isDvarAllowed( "st_remove_boards" ) )
+		level.remove_boards = getDvarInt( "st_remove_boards" );
+
 	if( !level.remove_boards )
 		return;
 
@@ -245,6 +247,10 @@ remove_boards_from_windows()
 
 turn_on_power() //by xepixtvx
 {	
+	create_dvar( "st_power_on", 1 );
+	if( !isDvarAllowed( "st_power_on" ) )
+		level.power_on = getDvarInt( "st_power_on" );
+
 	if( !level.power_on )
 		return;
 
@@ -313,6 +319,10 @@ isDvarAllowed( dvar )
 
 give_perks_on_revive()
 {
+	create_dvar( "st_perks", 1 );
+	if( !isDvarAllowed( "st_perks" ) )
+		level.perks_on_revive = getDvarInt( "st_perks" );
+
 	if( !level.perks_on_revive )
 		return;
 
@@ -329,6 +339,10 @@ give_perks_on_revive()
 
 give_perks_on_spawn()
 {
+	create_dvar( "st_perks", 1 );
+	if( !isDvarAllowed( "st_perks" ) )
+		level.perks_on_spawn = getDvarInt( "st_perks" );
+
 	if( !level.perks_on_spawn )
 		return;
 
@@ -401,6 +415,10 @@ give_perks( perk_array )
 
 give_weapons_on_spawn()
 {
+	create_dvar( "st_weapons", 1 );
+	if( !isDvarAllowed( "st_weapons" ) )
+		level.weapons_on_spawn = getDvarInt( "st_weapons" );
+
 	if( !level.weapons_on_spawn )
 		return;
 	
@@ -412,7 +430,10 @@ give_weapons_on_spawn()
         	location = level.scr_zm_map_start_location;
             if ( location == "farm" )
             {
-                self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
+				if( isDefined( level.VERSION ) )
+                	self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
+				else
+					self giveweapon_nzv( "raygun_mark2_zm" );
                 self giveweapon_nzv( "cymbal_monkey_zm" );
                 self giveweapon_nzv( "qcw05_zm" );
                 self switchToWeapon( "raygun_mark2_upgraded_zm" );
@@ -427,7 +448,10 @@ give_weapons_on_spawn()
             }
             else if ( location == "transit" && !is_classic() ) //depot
             {
-                self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
+                if( isDefined( level.VERSION ) )
+                	self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
+				else
+					self giveweapon_nzv( "raygun_mark2_zm" );
                 self giveweapon_nzv( "qcw05_zm" );
                 self giveweapon_nzv( "cymbal_monkey_zm" );
                 self giveweapon_nzv( "tazer_knuckles_zm" );
@@ -993,19 +1017,25 @@ timer_hud_watcher()
 	self endon("disconnect");
 	level endon( "end_game" );
 
+	create_dvar( "hud_timer", 0 );
+	if( !isDvarAllowed( "hud_timer" ) )
+		return;
+
 	while(1)
 	{	
-		while( !level.hud_timer )
+		while( !getDvarInt( "hud_timer" ) )
 		{
 			wait 0.1;
 		}
+		level.hud_timer = 1;
 		self.timer_hud.y = (2 + self.timer_hud_offset);
 		self.timer_hud.alpha = 1;
 
-		while( level.hud_timer )
+		while( getDvarInt( "hud_timer" ) )
 		{
 			wait 0.1;
 		}
+		level.hud_timer = 0;
 		self.timer_hud.alpha = 0;
 	}
 }
@@ -1064,19 +1094,25 @@ round_timer_hud_watcher()
 	self endon("disconnect");
 	level endon( "end_game" );
 
+	create_dvar( "hud_round_timer", 1 );
+	if( !isDvarAllowed( "hud_round_timer" ) )
+		return;
+
 	while( 1 )
 	{
-		while( !level.hud_round_timer )
+		while( !getDvarInt( "hud_round_timer" ) )
 		{
 			wait 0.1;
 		}
+		level.hud_round_timer = 1;
 		self.round_timer_hud.y = (2 + (15 * level.hud_timer ) + self.timer_hud_offset );
 		self.round_timer_hud.alpha = 1;
 
-		while( level.hud_round_timer )
+		while( getDvarInt( "hud_round_timer" ) )
 		{
 			wait 0.1;
 		}
+		level.hud_round_timer = 0;
 		self.round_timer_hud.alpha = 0;
 
 	}
@@ -1164,18 +1200,24 @@ zombie_remaining_hud_watcher()
 	self endon("disconnect");
 	level endon( "end_game" );
 
+	create_dvar( "hud_remaining", 1 );
+	if( !isDvarAllowed( "hud_remaining" ) )
+		return;
+
 	while(1)
 	{
-		while( !level.hud_zombie_counter )
+		while( !getDvarInt("hud_remaining") )
 		{
 			wait 0.1;
 		}
+		level.hud_zombie_counter = 1;
 		self.zombie_counter_hud.alpha = 1;
 
-		while( level.hud_zombie_counter )
+		while( getDvarInt("hud_remaining") )
 		{
 			wait 0.1;
 		}
+		level.hud_zombie_counter = 0;
 		self.zombie_counter_hud.alpha = 0;
 	}
 }
@@ -1255,15 +1297,20 @@ zone_hud_watcher( x, y )
 	self endon("disconnect");
 	level endon( "end_game" );
 
+	create_dvar( "hud_zone", 1 );
+	if( !isDvarAllowed( "hud_zone" ) )
+		return;
+
 	prev_zone = "";
 	while(1)
 	{
-		while( !level.hud_zone_names )
+		while( !getDvarInt("hud_zone") )
 		{
 			wait 0.1;
 		}
+		self.zone_hud.alpha = 1;
 
-		while( level.hud_zone_names )
+		while( getDvarInt("hud_zone") )
 		{
 			self.zone_hud.y = (y + (self.zone_hud_offset * !level.hud_health_bar ) );
 

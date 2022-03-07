@@ -1,6 +1,6 @@
 # Black Ops 2 Strat Tester
 
-This mod for Black Ops 2 Zombies that will allow people to test strategies more efficiently in game.
+This mod for Black Ops 2 Zombies that will allow people to test strategies more efficiently.
 
 ## Created by: 5and5
 
@@ -26,6 +26,42 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 - Open "BO2-Strat_Tester.zip" and copy the "zm" folder into `%localappdata%\Plutonium\storage\t6\scripts`
 - Launch the game and enjoy!
 
+## Patch Notes
+
+### General
+
+- Start round is set to 70 by default
+- Start delay is set to 15 by default
+- Weapons for high round setup are given
+- Perks are given on spawn
+- Perks are given after being revived
+- Power is turned on
+- Buildable parts are given on spawn
+- Boards are removed from windows
+
+### HUD
+
+- Timer
+- Round timer
+- Trap timer
+- SPH - appears at the end of rounds
+- Zombies remaining counter
+- Current player zone
+
+### Commands (Only Works on Pluto)
+
+- `strat_tester 0` Disables strat tester
+- `start_round 100` Changes the start round to 100
+- `start_delay 0` Changes start delay to 0 seconds
+- `hud_timer 1` Enables total timer hud
+- `hud_round_timer 0` Disables round timer hud
+- `hud_remaining 0` Disables zombie counter hud
+- `hud_zone 0` Disables zone name hud
+- `st_perks 0` Disables perks being given
+- `st_weapons 0` Disables weapons being given
+- `st_remove_boards 0` Disables boards being removed
+- `st_power_on 0` Disables power being turned on
+
 ## How to Use Cheats
 
 - Cheats can be used by typing their key word(s) into the console
@@ -44,31 +80,10 @@ This mod for Black Ops 2 Zombies that will allow people to test strategies more 
 ### List of Useful Binds
 
 - Enter these into the console then press the corresponding key to activate them
-- `bind F1 noclip` binds noclip to F1
-- `bind F2 "give ammo"` binds max ammo to F2
-- `bind F3 god` binds godmode to F3
-- `bind F4 "toggle timescale 5 1"` binds 5x timescale to F4
-
-## Patch Notes
-
-### General
-
-- Start round is set to 70 this can be changed with `start_round X` (only works on pluto)
-- Weapons for high round setup are given
-- Perks are given on spawn
-- Perks are given after being revived
-- Power is turned on
-- Buildable parts are given on spawn
-- Boards are removed from windows
-
-### HUD
-
-- Timer
-- Round timer
-- Trap timer
-- SPH - appears at the end of rounds
-- Zombies remaining counter
-- Current player zone
+- `bind F1 god` binds godmode to F1
+- `bind F2 noclip` binds noclip to F2
+- `bind F3 "give ammo"` binds max ammo to F3
+- `bind F4 "toggle timescale 5 1"` binds 5x timescale toggle to F4
 
 # Coding Related Stuff
 
