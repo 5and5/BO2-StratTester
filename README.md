@@ -159,3 +159,5 @@ Using VSCode is the easiest way to build. ALl you have to do is press `F1`, sele
 
 # Credits
 5and5 - Coding
+TTS - Readme
+JBleezy - Some code

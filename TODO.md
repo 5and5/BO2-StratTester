@@ -25,9 +25,8 @@
 ### Settings
 
 - remove perk limit
-- round start delay
 - open doors
-- disable powerups
+- disable powerups setting
 
 ### Hud
 - health bar
