@@ -441,7 +441,6 @@ give_weapons_on_spawn()
             else if ( location == "town" )
             {
                 self giveweapon_nzv( "raygun_mark2_upgraded_zm" );
-				self giveWeapon_nzv( "ray_gun_upgraded_zm");
                 self giveweapon_nzv( "m1911_upgraded_zm" );
                 self giveweapon_nzv( "cymbal_monkey_zm" );
                 self switchToWeapon( "raygun_mark2_upgraded_zm" );
